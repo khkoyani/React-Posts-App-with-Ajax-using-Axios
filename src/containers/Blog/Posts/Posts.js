@@ -11,11 +11,6 @@ class Posts extends Component {
         posts: [],
         fullpostId: null,
     }
-
-    postClickHandler = (id) => {
-        this.props.history.push(this.props.match.url + id)
-    }
-
     componentDidMount() {
         console.log(this.props)
         axios.get('/posts')
@@ -28,11 +23,22 @@ class Posts extends Component {
                 })
                 
                 this.setState({posts: addedAuthor})
-            }
-        )
+            })
+            .catch( error => {
+                console.log( error );
+            } );
+    }
+    postClickHandler = (id) => {
+        console.log(this.state.fullpostId)
+        this.props.history.push('/posts/' + id)
+        
+
     }
 
+    
+
     render() {
+        console.log(this.props)
         const postsJSX = this.state.posts.map((p, index) => { 
             return (
                 // <Link to={{pathname: '/' + p.id}} key={p.id}>
@@ -52,10 +58,20 @@ class Posts extends Component {
                 <section className="Posts">
                     {postsJSX}
                 </section>
-                <Route path={'/:id'} exact component={FullPost}></Route>
+                <Route path={this.props.match.url + '/:id'} exact component={FullPost}></Route>
+                
+                
             </div>
         );
     }
 }
 
 export default Posts;
+
+// {url: "/posts/1", method: "get", headers: {…}, baseURL: "https://jsonplaceholder.typicode.com", transformRequest: Array(1), …}
+// FullPost.js:13 {id: "1"}
+// index.js:11 {url: "/posts/1", method: "get", headers: {…}, baseURL: "https://jsonplaceholder.typicode.com", transformRequest: Array(1), …}
+// FullPost.js:13 {id: "1"}
+// index.js:11 {url: "/posts/1", method: "get", headers: {…}, baseURL: "https://jsonplaceholder.typicode.com", transformRequest: Array(1), …}
+// FullPost.js:13 {id: "1"}
+// index.js:11 

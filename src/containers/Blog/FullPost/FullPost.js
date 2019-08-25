@@ -9,19 +9,27 @@ class FullPost extends Component {
         error: false
     }
     
-    componentDidMount() {
-            if (this.props.match.params.id) {
-                if (!this.state.fullpost  || (this.state.fullpost && this.state.fullpost.id !== this.props.match.params.id)) {
-                    axios.get('/posts/' + this.props.match.params.id)
-                    .then(r => {
-                        this.setState({fullpost: r.data})
-                    })
-                    .catch(err => {
-                        this.setState({error: true})
-                    })
-                }
+    loadData () {
+        if ( this.props.match.params.id ) {
+            if ( !this.state.fullpost || (this.state.fullpost && this.state.fullpost.id !== +this.props.match.params.id) ) {
+                axios.get( '/posts/' + this.props.match.params.id )
+                    .then( response => {
+                        // console.log(response);
+                        this.setState( { fullpost: response.data } );
+                    } );
             }
+        }
     }
+
+     componentDidMount () {
+        console.log('in mount', this.props);
+        this.loadData();
+    }
+
+    componentDidUpdate() {
+        this.loadData();
+    }
+
    
     deletePostHandler = () => {
         axios.delete('/posts/' + this.props.match.params.id).then(r => console.log(r.data))

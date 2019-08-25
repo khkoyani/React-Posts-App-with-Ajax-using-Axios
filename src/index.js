@@ -7,10 +7,7 @@ import axios from 'axios'
 
 axios.defaults.baseURL = 'https://jsonplaceholder.typicode.com'
 
-axios.interceptors.request.use(req => {
-    console.log(req)
-    return req
-})
+
 
 ReactDOM.render( <App />, document.getElementById( 'root' ) );
 registerServiceWorker();
