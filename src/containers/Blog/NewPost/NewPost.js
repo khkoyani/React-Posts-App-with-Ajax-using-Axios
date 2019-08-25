@@ -13,8 +13,11 @@ class NewPost extends Component {
         axios.post('/posts', this.state).then(r => {console.log(r.data)})
     }
 
+    componentDidMount() {
+        console.log(this.props)
+    }
+
     render () {
-        console.log(this.state.author)
         return (
             <div className="NewPost">
                 <h1>Add a Post</h1>

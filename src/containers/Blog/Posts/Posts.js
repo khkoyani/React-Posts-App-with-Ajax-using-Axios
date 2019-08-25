@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import Post from '../../../components/Post/Post.js'
+import './Posts.css'
+// import {Link} from 'react-router-dom'
+import {Route} from 'react-router-dom'
+import FullPost from '../FullPost/FullPost'
 
 class Posts extends Component {
     state = {
@@ -9,10 +13,11 @@ class Posts extends Component {
     }
 
     postClickHandler = (id) => {
-        this.setState({fullpostId: id})
+        this.props.history.push(this.props.match.url + id)
     }
 
     componentDidMount() {
+        console.log(this.props)
         axios.get('/posts')
             .then(r => {
                 const posts = r.data.slice(0, 9)
@@ -30,15 +35,25 @@ class Posts extends Component {
     render() {
         const postsJSX = this.state.posts.map((p, index) => { 
             return (
-                <Post key={p.id} title={p.title} author={p.author} 
-                clicked={(id) => this.postClickHandler(p.id)}></Post>
+                // <Link to={{pathname: '/' + p.id}} key={p.id}>
+                //     <Post  title={p.title} author={p.author} 
+                //     clicked={(id) => this.postClickHandler(p.id)}>
+                //     </Post>
+                // </Link>
+                <Post  title={p.title} author={p.author} key={p.id}
+                    clicked={(id) => this.postClickHandler(p.id)}>
+                    </Post>
+                
                 ) 
             })
 
         return (
-            <section className="Posts">
-                {postsJSX}
-             </section>
+            <div>
+                <section className="Posts">
+                    {postsJSX}
+                </section>
+                <Route path={'/:id'} exact component={FullPost}></Route>
+            </div>
         );
     }
 }
